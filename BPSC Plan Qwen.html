@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>72nd BPSC Prelims — Command Center</title>
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--ink:#1c2530;--mut:#5b6b7c;--line:#e3e8ef;--acc:#1f4e79;--acc2:#2e75b6;--ok:#1e7f4f;--warn:#b26a00;--bad:#b3261e;--rad:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,-apple-system,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.45}
+#app{display:flex;min-height:100vh}
+nav#sb{width:220px;background:var(--acc);color:#fff;position:sticky;top:0;height:100vh;padding:14px 10px;flex-shrink:0;overflow-y:auto}
+nav#sb h2{font-size:15px;padding:6px 10px 14px;border-bottom:1px solid rgba(255,255,255,.25);margin-bottom:10px;letter-spacing:.4px}
+nav#sb button{display:block;width:100%;text-align:left;background:none;border:0;color:#e8eef7;padding:9px 10px;border-radius:8px;cursor:pointer;font-size:14px;margin-bottom:2px}
+nav#sb button:hover,nav#sb button.on{background:rgba(255,255,255,.16);color:#fff}
+main{flex:1;padding:18px 22px 60px;max-width:1250px}
+#menuBtn{display:none;position:fixed;bottom:16px;right:16px;z-index:60;background:var(--acc);color:#fff;border:0;border-radius:30px;padding:12px 16px;font-size:15px;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+header#cd{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border-radius:var(--rad);padding:18px 22px;display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;margin-bottom:18px}
+#cd .big{font-size:30px;font-weight:700;letter-spacing:1px;font-variant-numeric:tabular-nums}
+#cd .lbl{font-size:11px;opacity:.85;letter-spacing:1.5px;text-transform:uppercase}
+#cd .exam{background:rgba(255,255,255,.15);padding:8px 14px;border-radius:8px;font-size:13px}
+section{margin-bottom:34px;scroll-margin-top:12px}
+h1.sec{font-size:20px;color:var(--acc);margin-bottom:4px}
+p.sub{color:var(--mut);font-size:12.5px;margin-bottom:14px}
+.grid{display:grid;gap:14px}
+.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--rad);padding:14px 16px}
+.card h3{font-size:13px;color:var(--mut);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.card .v{font-size:24px;font-weight:700;color:var(--acc)}
+.card .s{font-size:12px;color:var(--mut)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#eef2f7;color:var(--acc);font-weight:600}
+.bar{height:8px;background:#e8edf3;border-radius:6px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--acc2);border-radius:6px}
+.badge{display:inline-block;font-size:10.5px;font-weight:700;border-radius:20px;padding:2px 8px;margin-left:6px;letter-spacing:.3px}
+.bVH{background:#fdecea;color:var(--bad)}.bH{background:#fdecea;color:#c62828;background:#fce8e6}.bM{background:#fff3e0;color:var(--warn)}.bL{background:#fff8e1;color:#8d6e00}.bP{background:#e8f0fe;color:var(--acc)}
+.topic{display:flex;align-items:flex-start;gap:9px;padding:8px 4px;border-bottom:1px dashed var(--line)}
+.topic:last-child{border-bottom:0}
+.topic input[type=checkbox]{width:17px;height:17px;margin-top:2px;accent-color:var(--ok);flex-shrink:0;cursor:pointer}
+.topic .tn{flex:1}
+.topic .meta{font-size:11.5px;color:var(--mut)}
+.topic.done .tn{text-decoration:line-through;color:var(--mut)}
+.subjHead{display:flex;flex-wrap:wrap;align-items:center;gap:14px;justify-content:space-between;margin-bottom:10px}
+.grp{font-size:12px;font-weight:700;color:var(--acc2);text-transform:uppercase;letter-spacing:.8px;margin:12px 0 4px}
+textarea,input[type=text],input[type=number],select{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:inherit;background:#fbfcfe}
+textarea{min-height:64px;resize:vertical}
+label.f{display:block;font-size:12px;color:var(--mut);margin:8px 0 3px;font-weight:600}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:90px}
+button.act{background:var(--acc);color:#fff;border:0;border-radius:8px;padding:9px 14px;cursor:pointer;font-size:13px}
+button.act:hover{background:var(--acc2)}
+button.ghost{background:#eef2f7;color:var(--acc);border:0;border-radius:8px;padding:8px 12px;cursor:pointer;font-size:12.5px}
+.donutWrap{display:flex;align-items:center;gap:12px}
+.ins{padding:9px 12px;border-radius:8px;font-size:13px;margin-bottom:7px;border:1px solid var(--line)}
+.ins.w{background:#fff7ea;border-color:#f0d9b0}.ins.g{background:#eef7f0;border-color:#bcd9c4}.ins.i{background:#eef4fb;border-color:#c4d8ec}
+.mx td{cursor:pointer;text-align:center;user-select:none}
+.mx td.s0{background:#f2f5f9}.mx td.s1{background:#fff3d6}.mx td.s2{background:#ddefe2}
+.weekCard{border-left:4px solid var(--acc2)}
+.pill{font-size:11px;background:#eef2f7;border-radius:14px;padding:2px 9px;color:var(--acc);font-weight:600;margin:0 3px 3px 0;display:inline-block}
+svg text{font-family:inherit}
+.hscroll{overflow-x:auto}
+#searchRes .topic{background:#fbfcff;border:1px solid var(--line);border-radius:8px;margin-bottom:6px;padding:8px 10px}
+@media(max-width:900px){nav#sb{position:fixed;left:-240px;z-index:70;transition:left .25s}nav#sb.open{left:0}#menuBtn{display:block}main{padding:14px}}
+</style>
+</head>
+<body>
+<div id="app">
+<nav id="sb">
+<h2>🎯 72nd BPSC PRELIMS<br>COMMAND CENTER</h2>
+<button data-nav="sec-dash">🏠 Dashboard</button>
+<button data-nav="sec-plan">📅 9-Week Plan</button>
+<button data-nav="sec-subj">📚 Subject Topics</button>
+<button data-nav="sec-prog">📊 Progress</button>
+<button data-nav="sec-mock">📝 Mock Tests</button>
+<button data-nav="sec-weak">⚠️ Weak Areas</button>
+<button data-nav="sec-rev">🔄 Revision</button>
+<button data-nav="sec-ana">📈 Analytics</button>
+<button data-nav="sec-set">⚙️ Settings</button>
+</nav>
+<main>
+<header id="cd">
+ <div><div class="lbl">Time left until plan ends (18 Oct 2026, 11:59 PM)</div>
+ <div class="big" id="cdTxt">-- DAYS : -- HOURS : -- MINUTES</div></div>
+ <div style="text-align:right"><div class="exam">📌 BPSC Prelims: <b>25 October 2026</b></div>
+ <div class="exam" style="margin-top:6px" id="todayTxt"></div></div>
+</header>
+
+<section id="sec-dash">
+<h1 class="sec">🏠 Dashboard — My Current Status</h1>
+<p class="sub">Auto-calculated from your checklists & mock entries. Syllabus progress and plan progress are kept separate.</p>
+<div class="grid g4" id="statCards"></div>
+<div class="grid g2" style="margin-top:14px">
+ <div class="card"><h3>Total Syllabus</h3><div class="donutWrap" id="ovDonut"></div></div>
+ <div class="card"><h3>🔥 High-Priority Topics (from your PYQ research)</h3><div id="quickTop"></div></div>
+</div>
+<div class="card" style="margin-top:14px"><h3>🤖 Smart Insights (data-driven only)</h3><div id="insights"></div></div>
+<div class="card" style="margin-top:14px"><h3>📅 Today's Tasks</h3>
+ <div id="todayList"></div>
+ <div class="row" style="margin-top:8px"><input type="text" id="todayIn" placeholder="Add today's task (e.g., Modern History – Congress sessions)"><button class="act" id="todayAdd">+ Add</button></div>
+ <div class="s" id="todayProg" style="margin-top:8px;font-size:12.5px;color:var(--mut)"></div>
+</div>
+</section>
+
+<section id="sec-plan">
+<h1 class="sec">📅 9-Week Plan (17 Aug – 18 Oct 2026)</h1>
+<p class="sub">Checklist auto-built from your plan. Notes persist locally. 19–25 Oct = Rest week → Exam 25 Oct.</p>
+<div class="grid g2" id="weekCards"></div>
+</section>
+
+<section id="sec-subj">
+<h1 class="sec">📚 Subject-wise Topic Tracker (PYQ research)</h1>
+<p class="sub">Frequencies = questions across 12 papers (60th–71st BPSC) from your trend PDF. Priority rule: 🔥 VH ≥20 · 🔴 H 10–19 · 🟠 M 5–9 · 🟡 L &lt;5.</p>
+<div class="card" style="margin-bottom:14px"><h3>🔎 Search & Filter</h3>
+ <div class="row"><input type="text" id="q" placeholder='Search topics, e.g. "river", "banking"…'>
+ <select id="fSubj"></select><select id="fPrio"><option value="">All priorities</option><option>Very High</option><option>High</option><option>Medium</option><option>Low</option><option>Plan</option></select>
+ <select id="fStat"><option value="">All status</option><option value="done">Completed</option><option value="rem">Remaining</option></select></div>
+ <div id="searchRes" style="margin-top:10px"></div>
+</div>
+<div id="subjTrack"></div>
+</section>
+
+<section id="sec-prog">
+<h1 class="sec">📊 Progress Comparison</h1>
+<p class="sub">Subject comparison (sorted) + Week×Subject matrix (click a cell to cycle Planned → In progress → Completed).</p>
+<div class="card" style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;align-items:center"><h3>Subject progress</h3><button class="ghost" id="sortBtn">Sort: by progress ↓</button></div>
+<div class="hscroll"><table id="cmpTable"></table></div></div>
+<div class="card"><h3>Week × Subject matrix</h3><div class="hscroll"><table class="mx" id="mxTable"></table></div>
+<div style="font-size:11.5px;color:var(--mut);margin-top:6px">Grey = Planned · Yellow = In progress · Green = Completed</div></div>
+</section>
+
+<section id="sec-mock">
+<h1 class="sec">📝 Mock Test Tracker (1 FLT per week)</h1>
+<p class="sub">Accuracy = Right ÷ Attempt × 100 (auto). Score out of 150.</p>
+<div class="grid g4" id="mockStats"></div>
+<div class="grid g2" style="margin-top:14px" id="mockCharts"></div>
+<div class="grid g2" style="margin-top:14px" id="mockCards"></div>
+</section>
+
+<section id="sec-weak">
+<h1 class="sec">⚠️ Weak Area Master List</h1>
+<p class="sub">Auto-aggregated from your mock "Weak areas" fields (line/comma separated). Frequency shows how many mocks flagged it. You can also add manually.</p>
+<div class="card"><div class="hscroll"><table id="weakTable"></table></div>
+<div class="row" style="margin-top:10px"><input type="text" id="weakIn" placeholder="Add weak area manually (e.g., Fundamental Rights)"><button class="act" id="weakAdd">+ Add</button></div></div>
+</section>
+
+<section id="sec-rev">
+<h1 class="sec">🔄 Revision Tracker</h1>
+<p class="sub">Optional global revision sweeps (add your own).</p>
+<div class="card" id="revCard"></div>
+</section>
+
+<section id="sec-ana">
+<h1 class="sec">📈 Analytics</h1>
+<div class="grid g3">
+ <div class="card"><h3>9-Week plan progress</h3><div id="weekBars"></div></div>
+ <div class="card"><h3>Syllabus vs Mock performance</h3><div id="vsBox"></div></div>
+ <div class="card"><h3>Two progress metrics</h3><div id="twoMet"></div></div>
+</div>
+</section>
+
+<section id="sec-set">
+<h1 class="sec">️ Settings & Data</h1>
+<div class="card"><p style="font-size:13px;color:var(--mut);margin-bottom:10px">All data is stored in this browser (localStorage). Export a JSON backup regularly.</p>
+<div class="row">
+<button class="act" id="saveBtn">💾 Save Progress</button>
+<button class="ghost" id="expBtn">⬇️ Export JSON</button>
+<button class="ghost" id="impBtn">⬆️ Import JSON</button>
+<input type="file" id="impFile" accept=".json" style="display:none">
+<button class="ghost" style="background:#fdecea;color:var(--bad)" id="resetBtn">🗑 Reset All Data</button>
+</div></div>
+</section>
+</main>
+</div>
+<button id="menuBtn">☰ Menu</button>
+
+<script>
+/* ============ DATA (FROM USER'S RESEARCH ONLY) ============ */
+const PLAN=[
+{w:1,d:'17–23 Aug',s:['Science','Geography','Bihar Special','Current Affairs','FLT']},
+{w:2,d:'24–30 Aug',s:['Science','Geography','Bihar Special','Current Affairs','FLT']},
+{w:3,d:'31 Aug–06 Sep',s:['Science','Geography','Bihar Special','Current Affairs','FLT']},
+{w:4,d:'07–13 Sep',s:['Polity','Economy','Math','Current Affairs','FLT']},
+{w:5,d:'14–20 Sep',s:['Polity','Economy','Math','Current Affairs','FLT']},
+{w:6,d:'21–27 Sep',s:['History','Reasoning','Old Revision','Current Affairs','FLT']},
+{w:7,d:'28 Sep–04 Oct',s:['History','Reasoning','Old Revision','Current Affairs','FLT']},
+{w:8,d:'05–11 Oct',s:['History','Reasoning','Old Revision','Current Affairs','FLT']},
+{w:9,d:'12–18 Oct',s:['PYQ','Other Exam MCQ','Current Affairs','FLT']}];
+const SUBJ_TREND={History:'Highest weight, steady (~27.8/paper)',Geography:'Stable (~15.1/paper)',Polity:'~11.5/paper',Economy:'Low but scoring (~6.9/paper)',Science:'High & steady (~26.7/paper)','Bihar Special':'Rising trend (~20.6/paper)','Math/Reasoning':'~8.6/paper combined','Current Affairs':'Weekly per plan'};
+const SUBJECTS=[
+{name:'History',groups:[
+ ['Ancient India',[['Mauryan period',17],['Buddhism & Jainism',12],['Gupta & Later Gupta period',20],['Post-Mauryan period',1],['Ancient dynasties (Gupta, Sena & others)',17]]],
+ ['Medieval India',[['Early-medieval dynasties (Pala, Sena etc.)',15],['Sultanate & Mughal-era rulers',13],['Medieval South India',6],['Bhakti & Sufi movements',5]]],
+ ['Modern India',[['Indian National Movement',66],['Press: newspapers, magazines & books',22],['Revolutionary activities',21],['Colonial reforms & policies',21],['Socio-religious movements',17],['Peasant & tribal movements',15],['Various institutions & organisations',14],['Congress sessions',12],['Revolt of 1857',10],['Rise of European companies',5]]]]},
+{name:'Geography',groups:[
+ ['Bihar & population',[['Geography of Bihar (physiography, rivers, soil)',29],['Census & population (incl. Bihar)',19]]],
+ ['Physical & world',[['Land, ocean, continents & islands',28],['Country & capital',6],['Environment & climate',5]]],
+ ['Resources & economy',[['Natural resources',19],['Minerals & energy (coal, petroleum, iron ore)',16],['Soil & climate',15],['Agriculture',11],['Industry',10],['Transport, communication & ports',4]]]]},
+{name:'Polity',groups:[
+ ['Core Constitution',[['Executive (President, PM, Governor)',21],['Legislature (Parliament & State)',15],['Judiciary',15],['Fundamental rights',5],['Sources of the Constitution',6],['Preamble',2]]],
+ ['Bodies & local gov',[['Panchayati Raj',13],['Constitutional bodies',7],['Statutory bodies',7]]],
+ ['Political system',[['Political parties & elections',12],['Amendments, schedules & articles',9],['Centre–state relations',5]]]]},
+{name:'Economy',groups:[
+ ['Core economy',[['Planning (PC / NITI Aayog / plans)',16],['Money & banking',14],['National income',6],['Agriculture & industry economy',6],['Public finance (budget & fiscal)',5]]]]},
+{name:'Science',groups:[
+ ['Physics',[['Radioactivity & electricity',20],['Light',18],['Units & dimensions',17],['Heat',15],['Speed & motion',15],['Sound',4],['Scientific concepts & institutions',5]]],
+ ['Chemistry',[['Important chemical compounds',24],['Acids, bases & salts',15],['Metals & non-metals',14],['Solutions',8],['Environmental pollution',8]]],
+ ['Biology',[['Classification of animals & plants',44],['Diseases & their causes',22],['Nutrition (vitamins & minerals)',19],['Cell',12],['Human hormonal system',12],['Blood & circulatory system',5],['Digestive system',5],['Nervous system',4]]]]},
+{name:'Bihar Special',groups:[
+ ['Bihar GK',[['History of Bihar',78],['Geography of Bihar',29],['Bihar economy & society',22],['State economy & human development',22],['Census & demographic profile of Bihar',16],['Bihar polity',2]]]]},
+{name:'Math/Reasoning',plan:true,groups:[['Practice blocks (per plan)',[['Math practice blocks (Weeks 4–5)',0],['Reasoning practice blocks (Weeks 6–8)',0]]]]},
+{name:'Current Affairs',plan:true,groups:[['Weekly CA (per plan)',PLAN.map(p=>['Current affairs — Week '+p.w,0])]]}];
+/* ids */
+SUBJECTS.forEach((s,si)=>s.groups.forEach((g,gi)=>g[1].forEach((t,ti)=>t.id='t'+si+'_'+gi+'_'+ti)));
+const prio=f=>f>=20?['Very High','bVH','🔥']:f>=10?['High','bH','🔴']:f>=5?['Medium','bM','🟠']:f>0?['Low','bL','🟡']:['Plan','bP','📅'];
+const allTopics=()=>SUBJECTS.flatMap(s=>s.groups.flatMap(g=>g[1].map(t=>({...t,subj:s.name}))));
+
+/* ============ STATE ============ */
+const KEY='bpsc72tracker_v1';
+let state={topics:{},wk:{},mocks:Array.from({length:9},()=>({name:'',score:'',att:'',r:'',w:'',weak:'',learn:'',rev:''})),matrix:{},weakRev:{},weakMan:[],rev:[{n:'Revision 1 — full sweep',d:false},{n:'Revision 2 — condensed notes',d:false},{n:'Revision 3 — final rapid',d:false}],today:[],sortAlpha:false};
+try{const s=localStorage.getItem(KEY);if(s)state=Object.assign(state,JSON.parse(s));}catch(e){}
+function save(){localStorage.setItem(KEY,JSON.stringify(state));}
+const $=id=>document.getElementById(id);
+const P=(a,b)=>b?Math.round(a/b*100):0;
+
+/* week checklist definition */
+function wkItems(w){const p=PLAN[w-1];const it=[];p.s.forEach(s=>{
+ if(s==='FLT')it.push('FLT mock test taken + analysed');
+ else if(s==='Current Affairs')it.push('Current affairs covered');
+ else if(s==='Old Revision')it.push('Old revision completed');
+ else if(s==='PYQ')it.push('PYQ set solved');
+ else if(s==='Other Exam MCQ')it.push('Other-exam MCQ practice');
+ else it.push(s+': planned topics completed');});
+ it.push('Revision of previous week\u2019s topics');it.push('Weekly target completed');return it;}
+
+/* ============ COMPUTE ============ */
+function subjStats(){return SUBJECTS.map(s=>{const ts=s.groups.flatMap(g=>g[1]);const done=ts.filter(t=>state.topics[t.id]).length;return{name:s.name,done,total:ts.length,pct:P(done,ts.length)};});}
+function overall(){const ts=allTopics();const d=ts.filter(t=>state.topics[t.id]).length;return{d,t:ts.length,pct:P(d,ts.length)};}
+function weekPct(w){const it=wkItems(w);const d=it.filter((_,i)=>state.wk[w]&&state.wk[w][i]).length;return{d,t:it.length,pct:P(d,it.length)};}
+function planPct(){let d=0,t=0;for(let w=1;w<=9;w++){const x=weekPct(w);d+=x.d;t+=x.t;}return P(d,t);}
+function mockDone(){return state.mocks.map((m,i)=>({...m,i,acc:m.att>0?(m.r/m.att*100):null,done:m.score!==''}));}
+
+/* ============ SVG HELPERS ============ */
+function donut(pct,size=130,sw=15,color='#2e75b6'){const r=(size-sw)/2,c=2*Math.PI*r,d=c*pct/100;
+return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="#e8edf3" stroke-width="${sw}"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="${sw}" stroke-dasharray="${d} ${c-d}" stroke-linecap="round" transform="rotate(-90 ${size/2} ${size/2})"/><text x="50%" y="50%" text-anchor="middle" dy="6" font-size="${size/6}" font-weight="700" fill="#1c2530">${pct}%</text></svg>`;}
+function lineChart(vals,max,labels,color,h=170){const w=560,pad=30;const pts=vals.map((v,i)=>v==null?null:[pad+i*(w-2*pad)/8,h-10-(v/max)*(h-30)]);
+let path='',dots='',txt='';pts.forEach((p,i)=>{if(p){dots+=`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="${color}"/>`;txt+=`<text x="${p[0]}" y="${p[1]-8}" text-anchor="middle" font-size="11" fill="#1c2530">${vals[i]}</text>`;if(path==='')path='M'+p[0]+' '+p[1];else path+=' L'+p[0]+' '+p[1];}});
+let xl='';labels.forEach((l,i)=>{xl+=`<text x="${pad+i*(w-2*pad)/8}" y="${h-0}" text-anchor="middle" font-size="10" fill="#5b6b7c">${l}</text>`;});
+return `<svg viewBox="0 0 ${w} ${h}" style="width:100%"><path d="${path}" fill="none" stroke="${color}" stroke-width="2.5"/>${dots}${txt}${xl}</svg>`;}
+
+/* ============ RENDER ============ */
+function renderDash(){const o=overall(),ss=subjStats(),md=mockDone(),done=md.filter(m=>m.done),accs=md.filter(m=>m.acc!=null);
+const avg=done.length?Math.round(done.reduce((a,m)=>a+ +m.score,0)/done.length):null;
+const best=done.length?Math.max(...done.map(m=>+m.score)):null;
+const avgAcc=accs.length?Math.round(accs.reduce((a,m)=>a+m.acc,0)/accs.length):null;
+const wks=[1,2,3,4,5,6,7,8,9].filter(w=>weekPct(w).pct===100).length;
+const strong=ss.filter(s=>s.total>3).sort((a,b)=>b.pct-a.pct)[0],weak=ss.filter(s=>s.total>3).sort((a,b)=>a.pct-b.pct)[0];
+$('statCards').innerHTML=`
+<div class="card"><h3>Syllabus</h3><div class="v">${o.pct}%</div><div class="s">Plan: ${planPct()}%</div></div>
+<div class="card"><h3>Topics</h3><div class="v">${o.d} / ${o.t}</div><div class="s">Remaining: ${o.t-o.d}</div></div>
+<div class="card"><h3>Weeks done</h3><div class="v">${wks} / 9</div><div class="s">Plan progress ${planPct()}%</div></div>
+<div class="card"><h3>Mocks</h3><div class="v">${done.length} / 9</div><div class="s">Avg ${avg??'--'}/150 · Best ${best??'--'}</div></div>
+<div class="card"><h3>Avg accuracy</h3><div class="v">${avgAcc??'--'}%</div><div class="s">Across attempted mocks</div></div>
+<div class="card"><h3>Strongest</h3><div class="v" style="font-size:17px">${strong?strong.name:'--'}</div><div class="s">${strong?strong.pct+'%':''}</div></div>
+<div class="card"><h3>Weakest</h3><div class="v" style="font-size:17px">${weak?weak.name:'--'}</div><div class="s">${weak?weak.pct+'%':''}</div></div>
+<div class="card"><h3>Days left</h3><div class="v" id="daysLeft">--</div><div class="s">Until 18 Oct 2026</div></div>`;
+$('ovDonut').innerHTML=donut(o.pct,150,18)+`<div><div style="font-size:15px;font-weight:700">${o.pct}% COMPLETE</div><div class="s">Completed: ${o.d} topics<br>Remaining: ${o.t-o.d} topics<br>Total: ${o.t} topics</div></div>`;
+/* quick high priority */
+const hp=allTopics().filter(t=>t.subj!=='Current Affairs'&&t.subj!=='Math/Reasoning').sort((a,b)=>b[1]-a[1]).slice(0,8);
+$('quickTop').innerHTML=hp.map(t=>{const p=prio(t[1]);const dn=state.topics[t.id]?'done':'';return `<div class="topic ${dn}"><input type="checkbox" data-bind="topic" data-id="${t.id}" ${state.topics[t.id]?'checked':''}><div class="tn"><a href="#tp_${t.id}" style="color:var(--acc)">${t.subj} — ${t[0]}</a><span class="badge ${p[1]}">${p[2]} ${p[0]}</span><div class="meta">Questions: ${t[1]} (60th–71st papers)</div></div></div>`;}).join('');
+renderInsights(ss,md,done,accs);}
+function renderInsights(ss,md,done,accs){const out=[];
+ss.forEach(s=>{if(s.total>3&&s.pct<40)out.push(['w',`⚠️ ${s.name} has only ${s.pct}% completion.`]);if(s.total>3&&s.pct>=85)out.push(['g',`🔥 ${s.name} is ${s.pct}% complete.`]);});
+out.push(['i',`📝 You have completed ${done.length}/9 mock tests.`]);
+if(accs.length>=4){const a=accs.map(m=>m.acc);const f=a.slice(0,3).reduce((x,y)=>x+y,0)/Math.min(3,a.length),l=a.slice(-3).reduce((x,y)=>x+y,0)/3;if(l>f)out.push(['g','📈 Mock accuracy has improved across your latest tests.']);if(l<f)out.push(['w','📉 Mock accuracy has dipped in recent tests.']);}
+const agg=weakAgg();Object.entries(agg).forEach(([k,v])=>{if(v.mocks.length>=3)out.push(['w',`⚠️ Weak area "${k}" has appeared in ${v.mocks.length} mock tests.`]);});
+$('insights').innerHTML=out.length?out.map(i=>`<div class="ins ${i[0]}">${i[1]}</div>`).join(''):'<div class="ins i">Start checking topics & entering mocks to generate insights.</div>';}
+function renderPlan(){$('weekCards').innerHTML=PLAN.map(p=>{const it=wkItems(p.w),wp=weekPct(p.w);
+return `<div class="card weekCard"><div class="subjHead"><div><b>WEEK ${p.w}</b> <span class="pill">${p.d}</span></div><div style="font-weight:700;color:var(--acc)">${wp.pct}%</div></div>
+<div style="margin-bottom:6px">${p.s.map(s=>`<span class="pill">${s}</span>`).join('')}</div>
+<div class="bar"><i style="width:${wp.pct}%"></i></div><div class="s" style="font-size:12px;color:var(--mut);margin:6px 0">Completed ${wp.d}/${wp.t} · Remaining ${wp.t-wp.d}</div>
+${it.map((x,i)=>`<div class="topic ${state.wk[p.w]&&state.wk[p.w][i]?'done':''}"><input type="checkbox" data-bind="wk" data-w="${p.w}" data-i="${i}" ${state.wk[p.w]&&state.wk[p.w][i]?'checked':''}><div class="tn">${x}</div></div>`).join('')}
+<label class="f">Weekly Notes (completed / pending / problems / learnings / carry-forward)</label>
+<textarea data-bind="notes" data-w="${p.w}">${state.wk['n'+p.w]||''}</textarea></div>`;}).join('');}
+function renderSubj(){const fs=$('fSubj');if(!fs.options.length){fs.innerHTML='<option value="">All subjects</option>'+SUBJECTS.map(s=>`<option>${s.name}</option>`).join('');}
+$('subjTrack').innerHTML=SUBJECTS.map((s,si)=>{const ts=s.groups.flatMap(g=>g[1]);const d=ts.filter(t=>state.topics[t.id]).length;const pct=P(d,ts.length);
+return `<div class="card" style="margin-bottom:14px"><div class="subjHead"><div><b style="font-size:16px">${s.name}</b><div class="s" style="font-size:12px;color:var(--mut)">${SUBJ_TREND[s.name]||''}</div></div>
+<div class="donutWrap">${donut(pct,92,11)}<div class="s">Completed: ${d}<br>Remaining: ${ts.length-d}<br>Total: ${ts.length}</div></div></div>
+${s.groups.map(g=>`<div class="grp">${g[0]}</div>`+g[1].map(t=>{const p=prio(t[1]);const dn=state.topics[t.id];
+return `<div class="topic ${dn?'done':''}" id="tp_${t.id}"><input type="checkbox" data-bind="topic" data-id="${t.id}" ${dn?'checked':''}><div class="tn">${t[0]} <span class="badge ${p[1]}">${p[2]} ${p[0]}</span><div class="meta">${t[1]>0?`Questions: ${t[1]} · Papers: 60th–71st set`:'From your 9-week plan'}</div></div></div>`;}).join('')).join('')}</div>`;}).join('');}
+function renderProg(){const ss=subjStats().filter(s=>!(s.total===0));const arr=[...ss];state.sortAlpha?arr.sort((a,b)=>a.name.localeCompare(b.name)):arr.sort((a,b)=>b.pct-a.pct);
+$('cmpTable').innerHTML='<tr><th>Subject</th><th>Completed</th><th>Total</th><th style="min-width:160px">Progress</th></tr>'+arr.map(s=>`<tr><td>${s.name}</td><td>${s.done}</td><td>${s.total}</td><td>${s.pct}%<div class="bar"><i style="width:${s.pct}%"></i></div></td></tr>`).join('');
+const mxSubs=['History','Geography','Polity','Economy','Science','Bihar Special','Math/Reasoning','Current Affairs'];
+let h='<tr><th>Subject</th>'+PLAN.map(p=>`<th>W${p.w}</th>`).join('')+'</tr>';
+h+=mxSubs.map(sn=>{const planW=PLAN.filter(p=>p.s.some(x=>x===sn||(sn==='Math/Reasoning'&&(x==='Math'||x==='Reasoning'))||(sn==='Current Affairs'&&x==='Current Affairs'))).map(p=>p.w);
+return `<tr><td>${sn}</td>${PLAN.map(p=>{const v=(state.matrix[sn]||{})[p.w]??(planW.includes(p.w)?0:-1);if(v<0)return'<td class="s0">–</td>';return `<td class="s${v}" data-mx="${sn}|${p.w}">${['Planned','In prog.','Done'][v]}</td>`;}).join('')}</tr>`;}).join('');
+$('mxTable').innerHTML=h;}
+function renderMocks(){const md=mockDone(),done=md.filter(m=>m.done),accs=md.filter(m=>m.acc!=null);
+const avg=done.length?Math.round(done.reduce((a,m)=>a+ +m.score,0)/done.length):null;
+const best=done.length?Math.max(...done.map(m=>+m.score)):null,low=done.length?Math.min(...done.map(m=>+m.score)):null;
+const tR=done.reduce((a,m)=>a+(+m.r||0),0),tW=done.reduce((a,m)=>a+(+m.w||0),0);
+const avgAtt=done.length?Math.round(done.reduce((a,m)=>a+(+m.att||0),0)/done.length):null;
+const avgAcc=accs.length?Math.round(accs.reduce((a,m)=>a+m.acc,0)/accs.length):null;
+$('mockStats').innerHTML=`<div class="card"><h3>Tests completed</h3><div class="v">${done.length} / 9</div></div>
+<div class="card"><h3>Avg score</h3><div class="v">${avg??'--'}/150</div><div class="s">Best ${best??'--'} · Lowest ${low??'--'}</div></div>
+<div class="card"><h3>Avg attempt / accuracy</h3><div class="v">${avgAtt??'--'} · ${avgAcc??'--'}%</div></div>
+<div class="card"><h3>Total right / wrong</h3><div class="v">${tR} / ${tW}</div></div>`;
+$('mockCharts').innerHTML=`<div class="card"><h3>Score trend (/150)</h3>${lineChart(md.map(m=>m.done?+m.score:null),150,md.map(m=>'M'+(m.i+1)),'#2e75b6')}</div>
+<div class="card"><h3>Accuracy trend (%)</h3>${lineChart(md.map(m=>m.acc!=null?Math.round(m.acc):null),100,md.map(m=>'M'+(m.i+1)),'#1e7f4f')}</div>`;
+$('mockCards').innerHTML=md.map(m=>`<div class="card"><h3>WEEK ${m.i+1} MOCK</h3>
+<label class="f">Mock test name</label><input type="text" data-bind="mock" data-m="${m.i}" data-f="name" value="${m.name||''}">
+<div class="row"><div><label class="f">Score /150</label><input type="number" min="0" max="150" data-bind="mock" data-m="${m.i}" data-f="score" value="${m.score}"></div>
+<div><label class="f">Total attempt</label><input type="number" min="0" data-bind="mock" data-m="${m.i}" data-f="att" value="${m.att}"></div>
+<div><label class="f">Right</label><input type="number" min="0" data-bind="mock" data-m="${m.i}" data-f="r" value="${m.r}"></div>
+<div><label class="f">Wrong</label><input type="number" min="0" data-bind="mock" data-m="${m.i}" data-f="w" value="${m.w}"></div></div>
+<div class="s" style="margin:6px 0;font-weight:700;color:var(--acc)">Accuracy: ${m.acc!=null?m.acc.toFixed(1)+'%':'--'}</div>
+<label class="f">Weak areas identified</label><textarea data-bind="mock" data-m="${m.i}" data-f="weak">${m.weak||''}</textarea>
+<label class="f">Mistakes / learnings</label><textarea data-bind="mock" data-m="${m.i}" data-f="learn">${m.learn||''}</textarea>
+<label class="f">Topics to revise</label><textarea data-bind="mock" data-m="${m.i}" data-f="rev">${m.rev||''}</textarea></div>`).join('');}
+function weakAgg(){const agg={};state.mocks.forEach((m,i)=>{if(!m.weak)return;m.weak.split(/[\n,;]+/).forEach(x=>{x=x.trim().toLowerCase();if(!x)return;agg[x]=agg[x]||{mocks:[]};if(!agg[x].mocks.includes(i+1))agg[x].mocks.push(i+1);});});
+state.weakMan.forEach(n=>{const k=n.toLowerCase();agg[k]=agg[k]||{mocks:[]};});return agg;}
+function renderWeak(){const agg=weakAgg();const rows=Object.entries(agg).sort((a,b)=>b[1].mocks.length-a[1].mocks.length);
+$('weakTable').innerHTML='<tr><th>Weak area</th><th>Identified in</th><th>Frequency</th><th>Revised?</th></tr>'+
+(rows.length?rows.map(([k,v])=>`<tr><td>${k}</td><td>${v.mocks.length?'Mock '+v.mocks.join(', '):'Manual'}</td><td>${v.mocks.length||1}</td><td><input type="checkbox" data-bind="weakrev" data-k="${k}" ${state.weakRev[k]?'checked':''}></td></tr>`).join(''):'<tr><td colspan="4">No weak areas yet — fill them in your mock cards or add below.</td></tr>');}
+function renderRev(){$('revCard').innerHTML=state.rev.map((r,i)=>`<div class="topic ${r.d?'done':''}"><input type="checkbox" data-bind="rev" data-i="${i}" ${r.d?'checked':''}><div class="tn">${r.n}</div></div>`).join('')+`<div class="row" style="margin-top:8px"><input type="text" id="revIn" placeholder="Add revision item"><button class="act" id="revAdd">+ Add</button></div>`;
+$('revAdd').onclick=()=>{const v=$('revIn').value.trim();if(v){state.rev.push({n:v,d:false});save();renderRev();}};}
+function renderToday(){$('todayList').innerHTML=state.today.length?state.today.map((t,i)=>`<div class="topic ${t.d?'done':''}"><input type="checkbox" data-bind="today" data-i="${i}" ${t.d?'checked':''}><div class="tn">${t.n}</div><button class="ghost" data-bind="todayDel" data-i="${i}">✕</button></div>`).join(''):'<div class="s" style="color:var(--mut);font-size:12.5px">No tasks for today yet.</div>';
+const d=state.today.filter(t=>t.d).length,t=state.today.length;
+$('todayProg').innerHTML=`Today's progress: <b>${P(d,t)}%</b> · Completed ${d} · Remaining ${t-d}`;}
+function renderAna(){$('weekBars').innerHTML=PLAN.map(p=>{const x=weekPct(p.w);return `<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:12px"><span>Week ${p.w}</span><b>${x.pct}%</b></div><div class="bar"><i style="width:${x.pct}%"></i></div></div>`;}).join('');
+const o=overall(),md=mockDone(),done=md.filter(m=>m.done),accs=md.filter(m=>m.acc!=null);
+const avg=done.length?Math.round(done.reduce((a,m)=>a+ +m.score,0)/done.length):null;
+const avgAcc=accs.length?Math.round(accs.reduce((a,m)=>a+m.acc,0)/accs.length):null;
+$('vsBox').innerHTML=`<div style="font-size:14px;margin-bottom:6px">Syllabus completion: <b>${o.pct}%</b></div><div style="font-size:14px;margin-bottom:6px">Average mock score: <b>${avg??'--'}/150</b></div><div style="font-size:14px">Average accuracy: <b>${avgAcc??'--'}%</b></div><div class="s" style="margin-top:8px">Correlation check only — no causation claimed.</div>`;
+$('twoMet').innerHTML=`<div style="font-size:15px;margin-bottom:8px">SYLLABUS PROGRESS<div class="bar"><i style="width:${o.pct}%"></i></div><b>${o.pct}%</b></div><div style="font-size:15px">9-WEEK PLAN PROGRESS<div class="bar"><i style="width:${planPct()}%"></i></div><b>${planPct()}%</b></div>`;}
+function renderSearch(){const q=$('q').value.trim().toLowerCase(),fs=$('fSubj').value,fp=$('fPrio').value,fst=$('fStat').value;
+if(!q&&!fs&&!fp&&!fst){$('searchRes').innerHTML='';return;}
+let res=allTopics().filter(t=>(!q||t[0].toLowerCase().includes(q))&&(!fs||t.subj===fs)&&(!fp||prio(t[1])[0]===fp)&&(!fst||(fst==='done'?!!state.topics[t.id]:!state.topics[t.id])));
+$('searchRes').innerHTML=res.length?res.map(t=>{const p=prio(t[1]);return `<div class="topic ${state.topics[t.id]?'done':''}"><input type="checkbox" data-bind="topic" data-id="${t.id}" ${state.topics[t.id]?'checked':''}><div class="tn">${t.subj} — ${t[0]} <span class="badge ${p[1]}">${p[2]} ${p[0]}</span><div class="meta">${t[1]>0?'Questions: '+t[1]:''}</div></div></div>`;}).join(''):'<div class="s">No matches.</div>';}
+function renderAll(){renderDash();renderPlan();renderSubj();renderProg();renderMocks();renderWeak();renderRev();renderToday();renderAna();renderSearch();}
+
+/* ============ EVENTS ============ */
+document.addEventListener('change',e=>{const b=e.target.dataset.bind;if(!b)return;
+if(b==='topic'){state.topics[e.target.dataset.id]=e.target.checked;}
+else if(b==='wk'){const w=e.target.dataset.w;state.wk[w]=state.wk[w]||{};state.wk[w][e.target.dataset.i]=e.target.checked;}
+else if(b==='weakrev'){state.weakRev[e.target.dataset.k]=e.target.checked;}
+else if(b==='rev'){state.rev[+e.target.dataset.i].d=e.target.checked;}
+else if(b==='today'){state.today[+e.target.dataset.i].d=e.target.checked;}
+else return;save();renderAll();});
+document.addEventListener('input',e=>{const b=e.target.dataset.bind;if(!b)return;
+if(b==='notes'){state.wk['n'+e.target.dataset.w]=e.target.value;save();}
+else if(b==='mock'){state.mocks[+e.target.dataset.m][e.target.dataset.f]=e.target.value;save();renderDash();renderMocks();renderWeak();renderAna();}});
+document.addEventListener('click',e=>{
+if(e.target.dataset.mx){const[sn,w]=e.target.dataset.mx.split('|');state.matrix[sn]=state.matrix[sn]||{};const cur=state.matrix[sn][w]??0;state.matrix[sn][w]=(cur+1)%3;save();renderProg();return;}
+if(e.target.dataset.bind==='todayDel'){state.today.splice(+e.target.dataset.i,1);save();renderToday();return;}
+if(e.target.dataset.nav){$(e.target.dataset.nav).scrollIntoView({behavior:'smooth'});$('sb').classList.remove('open');
+document.querySelectorAll('nav#sb button').forEach(x=>x.classList.toggle('on',x===e.target));}});
+$('todayAdd').onclick=()=>{const v=$('todayIn').value.trim();if(v){state.today.push({n:v,d:false});$('todayIn').value='';save();renderToday();}};
+$('weakAdd').onclick=()=>{const v=$('weakIn').value.trim();if(v){state.weakMan.push(v);$('weakIn').value='';save();renderWeak();}};
+$('sortBtn').onclick=()=>{state.sortAlpha=!state.sortAlpha;$('sortBtn').textContent=state.sortAlpha?'Sort: A→Z':'Sort: by progress ↓';save();renderProg();};
+['q','fSubj','fPrio','fStat'].forEach(id=>$(id).addEventListener('input',renderSearch));
+$('saveBtn').onclick=()=>{save();alert('Progress saved locally.');};
+$('expBtn').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));a.download='BPSC72_tracker_backup.json';a.click();};
+$('impBtn').onclick=()=>$('impFile').click();
+$('impFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{state=Object.assign(state,JSON.parse(r.result));save();renderAll();alert('Imported.');}catch(err){alert('Invalid JSON.');}};r.readAsText(f);};
+$('resetBtn').onclick=()=>{if(confirm('Reset ALL tracker data? This cannot be undone.')){localStorage.removeItem(KEY);location.reload();}};
+$('menuBtn').onclick=()=>$('sb').classList.toggle('open');
+document.documentElement.style.scrollBehavior='smooth';
+
+/* ============ COUNTDOWN ============ */
+const TARGET=new Date('2026-10-18T23:59:59');
+function tick(){const now=new Date(),d=TARGET-now;
+if(d<=0){$('cdTxt').textContent='9-Week Preparation Period Completed';}
+else{const dd=Math.floor(d/864e5),hh=Math.floor(d/36e5)%24,mm=Math.floor(d/6e4)%60;
+$('cdTxt').textContent=`${dd} DAYS : ${String(hh).padStart(2,'0')} HOURS : ${String(mm).padStart(2,'0')} MINUTES`;
+const dl=$('daysLeft');if(dl)dl.textContent=dd;}}
+setInterval(tick,1000);tick();
+$('todayTxt').textContent='Today: '+new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric',weekday:'short'});
+renderAll();
+</script>
+</body>
+</html>
